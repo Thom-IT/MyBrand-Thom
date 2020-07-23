@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="id01">
+        Hello Freind
+    </div>
+    <button type="submit" onclick="myFunction1()">Create New Post</button>
+    <script>
+        function myFunction1() {
+            var newcard = document.createElement("id01");
+            newcard.innerHTML = "CLICK ME";
+            document.body.appendChild(newcard);
+        }
+    </script>
+    <button type="submit" id="new" onclick="myFunction()">Remove Post</button>
+    <script>
+        function myFunction() {
+            var elmnt = document.getElementById("id01");
+            elmnt.remove();
+        }
+    </script>
+</body>
+
+</html>
