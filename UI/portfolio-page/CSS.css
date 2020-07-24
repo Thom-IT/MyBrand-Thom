@@ -201,35 +201,38 @@ font-size: 16px;
 .subtt{
 	margin-left: 800px;
 }
-/*================Media Query Part===================================== */
+/*
+
 
 
 @media screen and (max-width: 992px) {
-  body {
-    background-color: rgb(217, 217, 223);
+	body {
+	  background-color: rgb(217, 217, 223);
+	}
+	.container {
+	  padding-top: 20px;
+	  overflow-x: hidden;
+	  overflow-y: visible;
+	  height: 300px;
+	  margin-right: 30px;
+	  width: 100%;
   }
-  .container {
-	padding-top: 20px;
-	overflow-x: hidden;
-	overflow-y: visible;
-	height: 300px;
-    margin-right: 30px;
-    width: 100%;
-}
-}
+  }
+  
+ 
+  @media screen and (max-width: 600px) {
+	body {
+	  background-color: olive;
+	}
+	.container {
+	  padding-top: 20px;
+	  overflow-x: hidden;
+	  overflow-y: visible;
+	  height: 300px;
+	  margin-right: 30px;
+	  width: 100%;
+	  margin-top: 800%;
+  }
+  }
 
-/* On screens that are 600px or less, set the background color to olive */
-@media screen and (max-width: 600px) {
-  body {
-    background-color: olive;
-  }
-  .container {
-	padding-top: 20px;
-	overflow-x: hidden;
-	overflow-y: visible;
-	height: 300px;
-    margin-right: 30px;
-    width: 100%;
-    margin-top: 800%;
-}
-}
+*/
