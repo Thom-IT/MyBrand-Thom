@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Thomas.cv Portfolio Page</title>
 <link rel="stylesheet" type="text/css" href="CSS.css" />
-<link rel="stylesheet" type="text/css" href="responsive.css" />
+
 </head>
 <body>
 
@@ -13,67 +13,89 @@
   <a href="#home" class="subnavbtn" ></a>
   </div>
   <div class="subnav">
-    <button class="subnavbtn"><a href="LandingPage.html">About</a></button>
+    <button class="subnavbtn"><a href="#">About</a></button>
   </div>
   <div class="subnav">
-    <button class="subnavbtn"><a href="skills.html">Skills</a> </button>
+    <button class="subnavbtn"><a href="#">Skills</a> </button>
   </div> 
   <div class="subnav">
-<button class="subnavbtn"><a href="Services.html">Services</a> </button>
+<button class="subnavbtn"><a href="#">Services</a> </button>
   </div> 
   <div class="subnav">
-    <button class="subnavbtn"><a href="Experience.html">Experience</a> </button>
+    <button class="subnavbtn"><a href="#">Experience</a> </button>
   </div> 
    <div class="subnav">
-    <button class="subnavbtn"><a href="Education.html">Education</a> </button>
+    <button class="subnavbtn"><a href="#">Education</a> </button>
   </div> 
    <div class="subnav">
     <button class="subnavbtn"><a href="Portfolio.html">Portfolio</a> </button>
-  </div>
-   <div class="subnav">
-    <button class="subnavbtn"><a href="Testimonials.html">Testimonials</a> </button>
-  </div>  
-  
+  </div> 
   <div class="subnav">
-    <button class="subnavbtn"><a href="Contact.html">Contact</a> </button>
+    <button class="subnavbtn"><a href="#">Contact</a> </button>
   </div>
 </div>
 
-<div style="padding:0 16px">
-  <img src="smith.jpg" alt="Italian Trulli" style="width:340px; height:440; float:left; padding-left: 20px;">
-  <span></span>
+<div>
+  <img src="smith.jpg"  class="div_image">
 </div>
+
 <h2 style="margin-left: 500px;">what am I good at?</h2>
 <h1 style="color: blue;margin-left: 500px;">My Portfolio</h1>
-<div class="navbar"  style="background: #150233; width: 850px; margin-left: 385px; width: 940px;">
-                <a href="#home">All</a>
-                <a href="#news">Design</a>
-                <a href="#contact">Photography</a>
-                <a href="#contact">Brand Identity</a>
+<div class="navbar"  style="background: #150233;" >
+  <button class="button" onclick="myLink1()">All</button>
+  <button class="button" onclick="myLink2()">Design</button>
+  <button class="button" onclick="myLink3()">Photography</button>
+ <!--<button class="button" onclick="myLink4()">Brand Identity</button>-->
 </div>
+
 <div class="container">
 
-		<div class="col1">
-      <a href="#"> <img src="smith.jpg" alt="Italian Trulli" class="col1-img"><span>here is the picture that shows my first award in IT</span></a>
-			  <img src="smith.jpg" alt="Italian Trulli" class="col1-img" title="ON THIS photo you will see how the work started at my first carrier"><span>here is the picture that shows my first award in IT</span>
-			  <img src="smith.jpg" alt="Italian Trulli" class="col1-img"><span>here is the picture that shows my first award in IT</span>
-			  <img src="smith.jpg" alt="Italian Trulli" class="col1-img"><span>here is the picture that shows my first award in IT</span>
+		<div class="col1" id="myDIV">
+       <img src="smith.jpg" alt="Italian Trulli" class="col1-img" title="my First Image showing award">
+			  <img src="smith.jpg" alt="Italian Trulli" class="col1-img" title="my First Image showing award">
 		</div>
+    <script>
+      function myLink1() {
+        var x = document.getElementById("myDIV");
+        if (x.style.display === "none") {
+          x.style.display = "block";
+        } else {
+          x.style.display = "none";
+        }
+      }
+      </script>
+		<div class="col2" id="my2DIV">
+			 <img src="port1.jpg"  class="col1-img" title="my First Image showing award">
+			 <img src="port2.jpg"  class="col1-img" title="my First Image showing award">
+    </div>
+    <script>
+      function myLink2() {
+        var x = document.getElementById("my2DIV");
+        if (x.style.display === "none") {
+          x.style.display = "block";
+        } else {
+          x.style.display = "none";
+        }
+      }
+      </script>
+		<div class="col2" id="myDIV">
+      <img src="img_div3_1.jpg"  class="col1-img" title="my First Image showing award">
+      <img src="img_div3_3.jpg"  class="col1-img" title="my First Image showing award">
 
-		<div class="col2">
-      <img src="smith.jpg" alt="Italian Trulli" class="col1-img" title="here is the picture that shows my first award in IT"><span>here is the picture that shows my first award in IT</span>
-			  <img src="smith.jpg" alt="Italian Trulli" class="col1-img" title="ON THIS photo you will see how the work started at my first carrier"><span>here is the picture that shows my first award in IT</span>
-			 <img src="smith.jpg" alt="Italian Trulli" class="col2-img"><span>here is the picture that shows my first award in IT</span>
-			 <img src="smith.jpg" alt="Italian Trulli" class="col2-img"><span>here is the picture that shows my first award in IT</span>
-        </div>
-        <div class="col2">
-          <img src="smith.jpg" alt="Italian Trulli" class="col1-img" title="here is the picture that shows my first award in IT"><span>here is the picture that shows my first award in IT</span>
-			  <img src="smith.jpg" alt="Italian Trulli" class="col1-img" title="ON THIS photo you will see how the work started at my first carrier">
-            <img src="smith.jpg" alt="Italian Trulli" class="col2-img"><span>here is the picture that shows my first award in IT</span>
-            <img src="smith.jpg" alt="Italian Trulli" class="col2-img"><span>here is the picture that shows my first award in IT</span>
-       </div>
-		
-	</div>
-<p id="ft" align="center">copyright @2020 All right reserved | This Tamplate is made by Thomas MUKUNZI</p>
+   </div>
+   <script>
+    function myLink3() {
+      var x = document.getElementById("myDIV");
+      if (x.style.display === "none") {
+        x.style.display = "block";
+      } else {
+        x.style.display = "none";
+      }
+    }
+    </script>
+  </div>
+  <div id="ft">
+<p align="center">copyright @2020 All right reserved | This Tamplate is made by Thomas MUKUNZI</p>
+</div>
 </body>
 </html>
