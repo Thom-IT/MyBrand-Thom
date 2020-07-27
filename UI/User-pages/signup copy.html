@@ -131,15 +131,6 @@ hr {
       <button class="subnavbtn" onclick="document.getElementById('id012').style.display='block'"  style="margin-top: 15px;text-decoration: underline;">Sign In</a> </button>
       </div>
     </div>
-    <div>
-      <img src="smith.jpg"  class="div_image">
-    </div>
-    
-    <h2 style="margin-left: 500px;">what am I good at?</h2>
-    <h1 style="color: blue;margin-left: 500px;">My Portfolio</h1>
-    <div class="navbar"  style="background: #150233;" >
-      <button class="button" onclick="myLink1()">All</button>
-    </div>
     <div class="container">
 
       <div class="col1" id="myDIV">
@@ -160,13 +151,30 @@ hr {
          <img src="port1.jpg"  class="col1-img" title="my First Image showing award">
          <img src="port2.jpg"  class="col1-img" title="my First Image showing award">
       </div>
-      
+      <script>
+        function myLink2() {
+          var x = document.getElementById("my2DIV");
+          if (x.style.display === "none") {
+            x.style.display = "block";
+          } else {
+            x.style.display = "none";
+          }
+        }
+        </script>
       <div class="col2" id="myDIV">
         <img src="img_div3_1.jpg"  class="col1-img" title="my First Image showing award">
         <img src="img_div3_3.jpg"  class="col1-img" title="my First Image showing award">
   
      </div>
-     
+     <script>
+      function myLink3() {
+        var x = document.getElementById("myDIV");
+        if (x.style.display === "none") {
+          x.style.display = "block";
+        } else {
+          x.style.display = "none";
+        }
+      }
       </script>
     </div>
 <div id="id01" class="modal">
