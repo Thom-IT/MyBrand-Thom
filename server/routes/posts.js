@@ -4,68 +4,53 @@ const Post = require('../models/Post');
 const response = require('express');
 const Mongoose = require('mongoose');
 const { schema } = require('../models/Post');
-const { constant } = require('lodash');
+const verify = require('../middleware/check-auth');
+const { blogsValidation } = require('../middleware/validateBlogs');
+const bValidate = require('../middleware/validateBlogs');
+const { post } = require('./users');
 
 
 
 //=====Save Post=============
-router.post('/', async(req, res, next) => { //http://localhost:3000/blogs/
-    const Joi = require('joi');
-    const data = req.body;
-    const Schema = Joi.object().keys({
-        title: Joi.string().min(3).max(20).required(),
-        photoUrl: Joi.string().required(),
-        description: Joi.string().required()
+router.post('/', verify, bValidate, async(req, res, next) => { //http://localhost:3000/blogs/
+
+    const blog = new Post({
+        _id: new Mongoose.Types.ObjectId(),
+        title: req.body.title,
+        photoUrl: req.body.photoUrl,
+        description: req.body.description
     });
-    const { error } = Schema.validate(data);
-
-    const id = Math.ceil(Math.random() * 9999999);
-    if (error) {
-        res.status(400).json({
-            errorMessage: error.details[0].message
-
-            // status: 'error',
-            // message: 'Invalid Request Data',
-            // data: data
+    blog.save().then(result => {
+        console.log(result);
+        res.status(201).json({
+            message: 'the Blog is well Created',
+            createdBlog: {
+                title: result.title,
+                photoUrl: result.photoUrl,
+                description: result.description,
+                date: result.date,
+                _id: result._id,
+                // request: {
+                //     type: 'GET',
+                //     url: 'http://localhost:3000/post/' + result._id
+                // }
+            }
         });
-    } else {
-        const blog = new Post({
-            _id: new Mongoose.Types.ObjectId(),
-            title: req.body.title,
-            photoUrl: req.body.photoUrl,
-            description: req.body.description
+    }).catch(err => {
+        console.log(err);
+        res.status(500).json({
+            error: err
         });
-        blog.save().then(result => {
-            console.log(result);
-            res.status(201).json({
-                message: 'the Blog is well Created',
-                createdBlog: {
-                    title: result.title,
-                    photoUrl: result.photoUrl,
-                    description: result.description,
-                    date: result.date,
-                    _id: result._id,
-                    // request: {
-                    //     type: 'GET',
-                    //     url: 'http://localhost:3000/post/' + result._id
-                    // }
-                }
-            });
-        }).catch(err => {
-            console.log(err);
-            res.status(500).json({
-                error: err
-            });
-        });
+    });
 
-        //================================================
+    //================================================
 
-        // res.json({
-        //     status: 'Success',
-        //     message: 'Registered successfully  !!!',
-        //     data: Object.assign({ id })
-        // });
-    }
+    // res.json({
+    //     status: 'Success',
+    //     message: 'Registered successfully  !!!',
+    //     data: Object.assign({ id })
+    // });
+
 });
 
 
@@ -73,7 +58,7 @@ router.post('/', async(req, res, next) => { //http://localhost:3000/blogs/
 //=================ALL DATA================
 router.get('/', async(req, res, next) => {
     Post.find()
-        .select('title photoUrl description')
+        .select('title photoUrl description comment')
         .exec()
         .then(docs => {
             const response = {
@@ -85,10 +70,16 @@ router.get('/', async(req, res, next) => {
                         description: doc.description,
                         _id: doc._id,
                         date: doc.date,
-                        // request: {
-                        //     type: 'GET',
-                        //     url: 'http://localhost:3000/post/' + doc._id
-                        // }
+                        comment: doc.comment,
+                        likes: doc.likes,
+                        //Some Usfull Querries
+                        click_to_Like: 'Like Blog',
+                        type: 'DELETE',
+                        url: 'http://localhost:3000/blogs/likes/' + doc._id,
+
+                        click_to_coment: 'Comment the Blog',
+                        Method: 'PATCH',
+                        url_path: 'http://localhost:3000/blogs/comment/' + doc._id
                     }
                 })
             };
@@ -110,7 +101,7 @@ router.get('/', async(req, res, next) => {
 //specific post
 router.get('/:blogId', async(req, res, next) => {
 
-    const id = req.params.postId;
+    const id = req.params.blogId;
     Post.findById(id)
         .exec()
         .then(doc => {
@@ -136,8 +127,8 @@ router.get('/:blogId', async(req, res, next) => {
         });
 });
 //=================delete=====================
-router.delete('/:blogId', async(req, res) => {
-    const id = req.params.postId;
+router.delete('/:blogId', verify, async(req, res) => {
+    const id = req.params.blogId;
     Post.remove({ _id: id })
         .exec()
         .then(result => {
@@ -150,8 +141,8 @@ router.delete('/:blogId', async(req, res) => {
 
 });
 
-//=================Update======================
-router.patch('/:blogId', async(req, res) => {
+//=================Update Blog======================
+router.patch('/:blogId', verify, bValidate, async(req, res) => {
     try {
         const updatedPost = await Post.updateOne({ _id: req.params.postId }, {
             $set: {
@@ -167,15 +158,35 @@ router.patch('/:blogId', async(req, res) => {
 
 });
 
-// function validationError(message) {
-//     const Schema = Joi.object()({
-//         title: Joi.string().required(),
-//         photoUrl: Joi.string().required(),
-//         description: Joi.string().required()
-//     });
-//     return Joi.validate(message, schema);
-//     const validation = schema.validate(req.body);
-//     res.send(validation);
-// }
+//await Post.updateOne({ _id: req.params.id }, { $push: { comments: req.body } });
 
+//=================comment======================
+router.post('/comment/:blogId', async(req, res) => {
+    try {
+        await Post.updateOne({ _id: req.params.blogId }, { $push: { comment: req.body } });
+        res.status(200).json({
+            status: 200,
+            message: 'Blog comments is recorded'
+        });
+    } catch (err) {
+        res.json({ message: err });
+    }
+
+});
+
+
+//=================Likes======================
+router.post('/likes/:blogId', async(req, res) => {
+    try {
+        await Post.updateOne({ _id: req.params.blogId }, { $inc: { likes: 1 } });
+        res.status(200).json({
+            status: 200,
+            message: 'thanks for Liking the Blog'
+        });
+    } catch (err) {
+        console.log(err);
+        res.json({ message: err });
+    }
+
+});
 module.exports = router;
