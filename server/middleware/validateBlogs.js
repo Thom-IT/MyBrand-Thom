@@ -1,4 +1,4 @@
-   const Joi = require('@hapi/joi');
+   import Joi from '@hapi/joi';
 
    function bValidate(req, res, next) {
        const blogsValidation = Joi.object({
