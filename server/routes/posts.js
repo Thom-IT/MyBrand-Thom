@@ -1,18 +1,29 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const Post = require('../models/Post');
-const response = require('express');
-const Mongoose = require('mongoose');
-const { schema } = require('../models/Post');
-const verify = require('../middleware/check-auth');
-const { blogsValidation } = require('../middleware/validateBlogs');
-const bValidate = require('../middleware/validateBlogs');
-const { post } = require('./users');
+import Post from '../models/Post';
+import response from 'express';
+import Mongoose from 'mongoose';
+import { schema } from '../models/Post';
+import verify from '../middleware/check-auth';
+import blogsValidation from '../middleware/validateBlogs';
+import bValidate from '../middleware/validateBlogs';
+import post from './users';
+
+// import express from 'express';
+// const router = express.Router();
+// const Post = require('../models/Post');
+// const response = require('express');
+// const Mongoose = require('mongoose');
+// const { schema } = require('../models/Post');
+// const verify = require('../middleware/check-auth');
+// const { blogsValidation } = require('../middleware/validateBlogs');
+// const bValidate = require('../middleware/validateBlogs');
+// const { post } = require('./users');
 
 
 
 //=====Save Post=============
-router.post('/', verify, bValidate, async(req, res, next) => { //http://localhost:3000/blogs/
+router.post('/', verify, bValidate, (req, res, next) => { //http://localhost:3000/blogs/
 
     const blog = new Post({
         _id: new Mongoose.Types.ObjectId(),
@@ -23,7 +34,7 @@ router.post('/', verify, bValidate, async(req, res, next) => { //http://localhos
     blog.save().then(result => {
         console.log(result);
         res.status(201).json({
-            message: 'the Blog is well Created',
+            //  message: 'the Blog is well Created',
             createdBlog: {
                 title: result.title,
                 photoUrl: result.photoUrl,
@@ -37,7 +48,7 @@ router.post('/', verify, bValidate, async(req, res, next) => { //http://localhos
             }
         });
     }).catch(err => {
-        console.log(err);
+        // console.log(err);
         res.status(500).json({
             error: err
         });
@@ -57,6 +68,8 @@ router.post('/', verify, bValidate, async(req, res, next) => { //http://localhos
 
 //=================ALL DATA================
 router.get('/', async(req, res, next) => {
+
+
     Post.find()
         .select('title photoUrl description comment')
         .exec()
@@ -88,7 +101,7 @@ router.get('/', async(req, res, next) => {
                 res.status(200).json(response)
             } else {
                 res.status(404).json({
-                    message: 'No Entry found in Database'
+                    message: 'Not found, check well your URL'
                 })
             }
         }).catch(err => {
@@ -117,12 +130,13 @@ router.get('/:blogId', async(req, res, next) => {
                 });
 
             } else {
-                res.status(404).json({ message: 'No Data found on that ID' });
+                res.status(404).send('No Data found on that ID');
             }
 
         })
         .catch(err => {
             console.log(err);
+            res.status(500).json({ message: 'No Data found on that ID' });
             res.status(500).json({ message: 'No Data found on that ID' });
         });
 });
@@ -136,13 +150,16 @@ router.delete('/:blogId', verify, async(req, res) => {
         })
         .catch(err => {
             console.log(err);
-            res.status(500).json({ message: err });
+            res.status(404).json({
+                status: 404,
+                message: "The provided BlogId is not availeble in Database"
+            });
         });
 
 });
 
 //=================Update Blog======================
-router.patch('/:blogId', verify, bValidate, async(req, res) => {
+router.patch('/:blogId', bValidate, async(req, res) => {
     try {
         const updatedPost = await Post.updateOne({ _id: req.params.postId }, {
             $set: {
@@ -151,9 +168,15 @@ router.patch('/:blogId', verify, bValidate, async(req, res) => {
                 description: req.body.description
             }
         });
-        res.json(updatedPost);
+        res.status(200).send({
+            status: 200,
+            updatedPost
+        })
     } catch (err) {
-        res.json({ message: err });
+        res.status(404).send({
+            status: 404,
+            message: err
+        })
     }
 
 });

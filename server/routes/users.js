@@ -1,20 +1,35 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const User = require('../models/user'); //importing from model class to validate before registering
-const response = require('express');
-const mongoose = require('mongoose');
-const schema = require('../models/user');
-const constant = require('lodash');
-const bcrypt = require('bcrypt');
+import User from '../models/user'; //importing from model class to validate before registering
+import response from 'express';
+import mongoose from 'mongoose';
+import schema from '../models/user';
+import constant from 'lodash';
+import bcrypt from 'bcrypt';
 //const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const token = require('morgan');
-const verify = require('../middleware/check-auth');
-const uservalidation = require('../middleware/usersValidation');
-const loginValidation = require('../middleware/usersValidation');
+import jwt from 'jsonwebtoken';
+import token from 'morgan';
+import verify from '../middleware/check-auth';
+import { userValidation, loginValidation } from '../middleware/usersValidation';
+//import loginValidation from '../middleware/usersValidation';
+// const express = require('express');
+// const router = express.Router();
+// const User = require('../models/user'); //importing from model class to validate before registering
+// const response = require('express');
+// const mongoose = require('mongoose');
+// const schema = require('../models/user');
+// const constant = require('lodash');
+// const bcrypt = require('bcrypt');
+// //const bcrypt = require('bcryptjs');
+// const jwt = require('jsonwebtoken');
+// const token = require('morgan');
+// const verify = require('../middleware/check-auth');
+// const uservalidation = require('../middleware/usersValidation');
+// const loginValidation = require('../middleware/usersValidation');
+
 
 // Testing ==================
-router.post('/register', verify, uservalidation, async(req, res) => {
+router.post('/register', verify, userValidation, async(req, res) => {
     //Validating before save:
     // const { error } = schemaa.validate(req.body);
     // if (error) return res.status(400).send(error.details[0].message)
@@ -34,7 +49,7 @@ router.post('/register', verify, uservalidation, async(req, res) => {
     }
 });
 // //Validation login==================
-const Joi = require('@hapi/joi');
+import Joi from '@hapi/joi';
 
 const schemaavilid = Joi.object({
         //name: Joi.string().min(6).required(),
@@ -42,26 +57,31 @@ const schemaavilid = Joi.object({
         password: Joi.string().min(6).required()
 
     })
-    //====------------------end testing==========================
+    //====------------------Admin Login==========================
 router.post('/login', async(req, res) => {
     // const error = await userValidaton.validateAsync(req.body);
-    const { error } = schemaavilid.validate(req.body);
-    if (error) return res.status(400).send(error.details[0].message)
+    try {
+        const { error } = schemaavilid.validate(req.body);
+        if (error) return res.status(400).send(error.details[0].message)
 
-    // res.send(error.details[0].message);
-    // res.send("Done");
-    const user = await User.findOne({ email: req.body.email });
-    if (!user) return res.status(400).send('User Not FOUND');
-    const pwd = await bcrypt.compare(req.body.password, user.password)
-    if (!pwd) return res.status(400).send('the password is wrong');
+        // res.send(error.details[0].message);
+        // res.send("Done");
+        const user = await User.findOne({ email: req.body.email });
+        if (!user) return res.status(400).send('User Not FOUND');
+        const pwd = await bcrypt.compare(req.body.password, user.password)
+        if (!pwd) return res.status(400).send('the password is wrong');
 
 
-    //CREATE AND ASSIGN TOKEN
-    const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET)
-    res.header('auth-token', token).send({
-        status: 200,
-        token
-    });
+        //CREATE AND ASSIGN TOKEN
+        const token = await jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET)
+            //res.header('auth-token', token).send({
+        res.status(200).send({
+            status: 200,
+            token
+        });
+    } catch (error) {
+        res.status(404).send(error);
+    }
     //res.send('well done')
 
 });

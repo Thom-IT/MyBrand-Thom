@@ -1,16 +1,15 @@
-const express = require('express');
-const morgan = require('morgan');
-const { Mongoose } = require('mongoose');
-const bodyParser = require('body-parser');
+import express from 'express';
+import morgan from 'morgan';
+import { Mongoose } from 'mongoose';
+import bodyParser from 'body-parser';
 require('dotenv/config');
 const app = express();
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
+const DB = process.env.DB_CONNECTION;
 
 //import routes
-const blogRoute = require('./routes/posts');
-const userRoute = require('./routes/users');
-
-const { use } = require('./routes/posts');
+import blogRoute from './routes/posts';
+import userRoute from './routes/users';
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -21,12 +20,9 @@ app.use('/users', userRoute);
 app.use(express.json());
 app.use('/api/user', userRoute);
 
-//error handleling===================
+// //error handleling===================
 app.use((req, res, next) => {
-    const error = new Error('Not found, check well your URL');
-    error.status = 404;
-    console.log(error.message),
-        next(error);
+    return res.status(404).send("Not found, check well your URL");
 })
 app.use((error, req, res, next) => {
     res.status(error.status || 500);
@@ -34,9 +30,10 @@ app.use((error, req, res, next) => {
 });
 
 //connect to DB
-mongoose.connect(process.env.DB_CONNECTION, { useUnifiedTopology: true, useNewUrlParser: true }, () => {
+mongoose.connect('mongodb+srv://thom:123@cluster0.gkwdn.mongodb.net/<dbname>?retryWrites=true&w=majority', { useUnifiedTopology: true, useNewUrlParser: true }, () => {
     console.log('connected to Database')
 });
 //mongoose.Promise = global.Promise;
 //mongoose.connect("mongodb://thom:" + process.env.Mongo_ATLAS_PWD + "@cluster0-shard-00-00.gkwdn.mongodb.net:27017,cluster0-shard-00-01.gkwdn.mongodb.net:27017,cluster0-shard-00-02.gkwdn.mongodb.net:27017/<dbname>?ssl=true&replicaSet=atlas-fx9giz-shard-0&authSource=admin&retryWrites=true&w=majority")
 app.listen(3000, () => console.log('the Server is Up and Running as Well'));
+module.exports = app;
