@@ -26,13 +26,12 @@ import post from './users';
 router.post('/', verify, bValidate, (req, res, next) => { //http://localhost:3000/blogs/
 
     const blog = new Post({
-        _id: new Mongoose.Types.ObjectId(),
         title: req.body.title,
         photoUrl: req.body.photoUrl,
         description: req.body.description
     });
     blog.save().then(result => {
-        console.log(result);
+        //console.log(result);
         res.status(201).json({
             //  message: 'the Blog is well Created',
             createdBlog: {
@@ -48,7 +47,7 @@ router.post('/', verify, bValidate, (req, res, next) => { //http://localhost:300
             }
         });
     }).catch(err => {
-        // console.log(err);
+        console.log(err);
         res.status(500).json({
             error: err
         });
@@ -105,7 +104,7 @@ router.get('/', async(req, res, next) => {
                 })
             }
         }).catch(err => {
-            console.log(err);
+            // console.log(err);
             res.status(500).json({
                 error: err
             });
@@ -137,62 +136,55 @@ router.get('/:blogId', async(req, res, next) => {
         .catch(err => {
             console.log(err);
             res.status(500).json({ message: 'No Data found on that ID' });
-            res.status(500).json({ message: 'No Data found on that ID' });
+
         });
 });
-//=================delete=====================
-router.delete('/:blogId', verify, async(req, res) => {
-    const id = req.params.blogId;
-    Post.remove({ _id: id })
-        .exec()
-        .then(result => {
-            res.status(200).json({ result, message: 'you deleted data with ID:' + id })
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(404).json({
-                status: 404,
-                message: "The provided BlogId is not availeble in Database"
-            });
-        });
-
-});
-
-//=================Update Blog======================
-router.patch('/:blogId', bValidate, async(req, res) => {
+//==Delete post==================
+router.delete('/:postId', async(req, res) => {
     try {
-        const updatedPost = await Post.updateOne({ _id: req.params.postId }, {
-            $set: {
-                title: req.body.title,
-                photoUrl: req.body.photoUrl,
-                description: req.body.description
-            }
-        });
-        res.status(200).send({
+        const blog = await Post.findOne({ _id: req.params.postId });
+        if (!blog) return res.status(404).send('Not Found');
+        await Post.remove({ _id: req.params.postId });
+
+        return res.status(200).json({
             status: 200,
-            updatedPost
-        })
+            message: "deleted Successiful",
+            //deletedPost
+        });
     } catch (err) {
-        res.status(404).send({
+        return res.status(404).json({
             status: 404,
-            message: err
-        })
+            message: err.message
+        });
     }
-
 });
+//================Updating a Post===============
+router.patch('/:postId', bValidate, async(req, res) => {
+    try {
+        const blog = await Post.findOne({ _id: req.params.postId });
+        if (!blog) return res.status(404).send('blog Not Found');
+        await Post.updateOne({ _id: req.params.postId }, {
+            $set: { title: req.body.title, description: req.body.description }
 
-//await Post.updateOne({ _id: req.params.id }, { $push: { comments: req.body } });
-
+        });
+        return res.status(200).json({ message: 'successfuly Updated' });
+    } catch (err) {
+        console.log(err);
+        return res.status(400).json({ message: err });
+    }
+});
 //=================comment======================
 router.post('/comment/:blogId', async(req, res) => {
     try {
+        const blog = await Post.findOne({ _id: req.params.blogId });
+        if (!blog) return res.status(404).send('Blog Not Found');
         await Post.updateOne({ _id: req.params.blogId }, { $push: { comment: req.body } });
-        res.status(200).json({
+        return res.status(200).json({
             status: 200,
             message: 'Blog comments is recorded'
         });
     } catch (err) {
-        res.json({ message: err });
+        return res.status(400).json({ message: err });
     }
 
 });
@@ -201,14 +193,16 @@ router.post('/comment/:blogId', async(req, res) => {
 //=================Likes======================
 router.post('/likes/:blogId', async(req, res) => {
     try {
+        const blog = await Post.findOne({ _id: req.params.blogId });
+        if (!blog) return res.status(404).send('Blog Not Found');
         await Post.updateOne({ _id: req.params.blogId }, { $inc: { likes: 1 } });
-        res.status(200).json({
+        return res.status(200).json({
             status: 200,
             message: 'thanks for Liking the Blog'
         });
     } catch (err) {
-        console.log(err);
-        res.json({ message: err });
+        // console.log(err);
+        return res.status(400).json({ message: err });
     }
 
 });
