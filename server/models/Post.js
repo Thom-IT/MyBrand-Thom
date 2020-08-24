@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const PostSchema = mongoose.Schema({
-    _id: mongoose.Schema.Types.ObjectId,
+    // _id: mongoose.Schema.Types.ObjectId,
     title: String,
     //photoUrl: { type: match(/^http.*\.(jpeg|jpg|gif|png)$/) != null },
     photoUrl: String,
