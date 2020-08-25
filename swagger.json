@@ -14,7 +14,7 @@
     },
     "host": "mybrandthomas.herokuapp.com",
     "basePath": "/",
-    "schemes": ["http", "https"],
+    "schemes": ["https", "http"],
     "consumes": ["application/json"],
     "produces": ["application/json"],
     "paths": {
@@ -131,6 +131,88 @@
 
 
         },
+        "/queries/all": {
+            "get": {
+                "tags": ["Admin"],
+                "summary": "read all queries from DB",
+                "description": "view All query",
+                "operationId": "getAllqueris",
+                "parameters": [{
+                    "name": "auth-token",
+                    "in": "header",
+                    "required": true,
+                    "type": "string",
+                    "description": "Admin Token"
+                }],
+                "responses": {
+
+                    "201": {
+                        "description": "query successfully retrieved"
+                    },
+                    "404": {
+                        "description": "invalid URL"
+                    }
+                }
+            }
+        },
+        "/queries/{id}": {
+
+            "get": {
+                "tags": ["Admin"],
+                "summary": "view a specified query",
+                "description": "description",
+                "operationId": "getOnequery",
+                "parameters": [{
+                        "name": "auth-token",
+                        "in": "header",
+                        "required": true,
+                        "type": "string",
+                        "description": "Admin Token"
+                    },
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "blog successfully retrievd"
+                    },
+                    "404": {
+                        "description": "No Blog found to that ID"
+                    }
+                }
+            },
+            "delete": {
+                "tags": ["Admin"],
+                "summary": "Deleting a query",
+                "description": "Delete query",
+                "operationId": "deletequery",
+                "parameters": [{
+                        "name": "auth-token",
+                        "in": "header",
+                        "required": true,
+                        "type": "string",
+                        "description": "Admin Token"
+                    },
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "query successfully Deleted"
+                    },
+                    "404": {
+                        "description": "No query found to that ID"
+                    }
+                }
+            }
+
+        },
         "/blogs/{blogId}": {
             "get": {
                 "tags": ["Normal Users"],
@@ -152,7 +234,7 @@
                 }
             },
             "delete": {
-                "tags": ["Normal Users"],
+                "tags": ["Admin"],
                 "summary": "Deleting a blog",
                 "description": "Delete Blog",
                 "operationId": "deleteBlog",
@@ -179,7 +261,7 @@
                 }
             },
             "patch": {
-                "tags": ["Normal Users"],
+                "tags": ["Admin"],
                 "summary": "Updating a blog",
                 "description": "Updated Blog",
                 "operationId": "updateBlog",
@@ -283,10 +365,60 @@
             }
 
 
+        },
+        "/queries/": {
+            "post": {
+                "tags": ["Normal Users"],
+                "summary": "creating a query",
+                "description": "description",
+                "operationId": "queryId",
+                "parameters": [{
+                        "in": "body",
+                        "name": "body",
+                        "description": " object that needed to create a query",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/createQueries"
+                        }
+                    }
+
+                ],
+                "responses": {
+                    "201": {
+                        "description": "query successfully created"
+                    },
+                    "400": {
+                        "description": "invalid input"
+                    },
+                    "401": {
+                        "description": "authentication fails"
+                    }
+                }
+            }
+
+
         }
 
     },
     "definitions": {
+        "createQueries": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "required": true
+                },
+                "email": {
+                    "type": "string",
+                    "required": true
+                },
+                "query": {
+                    "type": "string",
+                    "required": true
+                }
+
+            }
+        },
         "UserLogin": {
             "type": "object",
             "properties": {
