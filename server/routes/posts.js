@@ -6,7 +6,7 @@ import Mongoose from 'mongoose';
 import { schema } from '../models/Post';
 import verify from '../middleware/check-auth';
 import blogsValidation from '../middleware/validateBlogs';
-import bValidate from '../middleware/validateBlogs';
+import { bValidate, commentValidate } from '../middleware/validateBlogs';
 import post from './users';
 //=====create a Blog Post=============
 router.post('/', verify, bValidate, (req, res, next) => { //http://localhost:3000/blogs/
@@ -51,14 +51,14 @@ router.get('/', async(req, res, next) => {
                         date: doc.date,
                         comment: doc.comment,
                         likes: doc.likes,
-                        //Some Usfull Querries
-                        click_to_Like: 'Like Blog',
-                        type: 'DELETE',
-                        url: 'http://localhost:3000/blogs/likes/' + doc._id,
+                        // //Some Usfull Querries
+                        // click_to_Like: 'Like Blog',
+                        // type: 'DELETE',
+                        // url: 'http://localhost:3000/blogs/likes/' + doc._id,
 
-                        click_to_coment: 'Comment the Blog',
-                        Method: 'PATCH',
-                        url_path: 'http://localhost:3000/blogs/comment/' + doc._id
+                        // click_to_coment: 'Comment the Blog',
+                        // Method: 'PATCH',
+                        // url_path: 'http://localhost:3000/blogs/comment/' + doc._id
                     }
                 })
             };
@@ -107,7 +107,7 @@ router.get('/:blogId', async(req, res, next) => {
         });
 });
 //==Delete post==================
-router.delete('/:postId', async(req, res) => {
+router.delete('/:postId', verify, async(req, res) => {
     try {
         const blog = await Post.findOne({ _id: req.params.postId });
         if (!blog) return res.status(404).send('Not Found');
@@ -126,7 +126,7 @@ router.delete('/:postId', async(req, res) => {
     }
 });
 //================Updating a Post===============
-router.patch('/:postId', bValidate, async(req, res) => {
+router.patch('/:postId', bValidate, verify, async(req, res) => {
     try {
         const blog = await Post.findOne({ _id: req.params.postId });
         if (!blog) return res.status(404).send('blog Not Found');
@@ -141,7 +141,7 @@ router.patch('/:postId', bValidate, async(req, res) => {
     }
 });
 //=================comment======================
-router.post('/comment/:blogId', async(req, res) => {
+router.post('/comment/:blogId', commentValidate, async(req, res) => {
     try {
         const blog = await Post.findOne({ _id: req.params.blogId });
         if (!blog) return res.status(404).send('Blog Not Found');

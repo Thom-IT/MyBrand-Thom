@@ -263,7 +263,7 @@ describe('POST /blogs/comment/:blogId', () => {
     it('should POST comment on Existing Blog', (done) => {
         const blog = {
             name: "Mukunzi",
-            comment: "Great Job"
+            comment: "Great Job, good Job!!!!!!!"
 
         };
         chai.request(app)
@@ -271,6 +271,7 @@ describe('POST /blogs/comment/:blogId', () => {
             .set('auth-token', adminToken)
             .send(blog)
             .end((error, response) => {
+                console.log(response.body)
                 response.should.have.status(200);
                 response.body.should.be.an('object');
                 done();
@@ -367,7 +368,7 @@ describe('POST /blogs/comment/:blogId', () => {
                 .send(blog)
                 .end((error, response) => {
                     // blogId = response.body._id;
-                    response.should.have.status(404);
+                    response.should.have.status(400);
                     done();
                 });
         });

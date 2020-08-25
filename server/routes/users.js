@@ -46,7 +46,7 @@ router.post('/createUser', userValidation, async(req, res, next) => {
 
         if (user.length >= 1) {
             return res.status(409).json({
-                message: "Mail Exist"
+                message: "The user with that Mail Exist"
             });
         } else {
 

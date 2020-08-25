@@ -1,0 +1,356 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "MY BRAND THOMAS",
+        "description": "Welcome to my Brand Application",
+        "contact": {
+            "email": "mukmaforo@gmail.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "https://github.com/Thom-IT/MyBrand-Thom"
+        },
+        "version": "1.0.1"
+    },
+    "host": "mybrandthomas.herokuapp.com",
+    "basePath": "/",
+    "schemes": ["http", "https"],
+    "consumes": ["application/json"],
+    "produces": ["application/json"],
+    "paths": {
+        "/api/user/createUser": {
+            "post": {
+                "tags": ["User"],
+                "summary": "Create an Account",
+                "description": "Creating User",
+                "operationId": "createUser",
+                "parameters": [{
+                        "in": "body",
+                        "name": "body",
+                        "description": " object that needed to create a blog",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/CreateUser"
+                        }
+                    }
+
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User successfully created"
+                    },
+                    "400": {
+                        "description": "Invalid Input, Check on validation"
+                    },
+                    "409": {
+                        "description": "the user with that Email Already Exist"
+                    }
+                }
+            }
+
+
+        },
+        "/api/user/login": {
+            "post": {
+                "tags": ["User"],
+                "summary": "login using registered user email and Password",
+                "description": "Admin Login",
+                "operationId": "login",
+                "parameters": [{
+                        "in": "body",
+                        "name": "body",
+                        "description": " object that needed to To Login into the Sytem",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/UserLogin"
+                        }
+                    }
+
+                ],
+                "responses": {
+                    "201": {
+                        "description": "User successfully created"
+                    },
+                    "400": {
+                        "description": "The User is not found in Database"
+                    }
+
+                }
+            }
+        },
+        "/blogs/": {
+            "post": {
+                "tags": ["Admin"],
+                "summary": "creating a blog",
+                "description": "description",
+                "operationId": "blogs",
+                "parameters": [{
+                        "name": "auth-token",
+                        "in": "header",
+                        "required": true,
+                        "type": "string",
+                        "description": "Admin Token"
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": " object that needed to create a blog",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Blogcreation"
+                        }
+                    }
+
+                ],
+                "responses": {
+                    "201": {
+                        "description": "blog successfully created"
+                    },
+                    "400": {
+                        "description": "invalid input"
+                    },
+                    "401": {
+                        "description": "authentication fails"
+                    }
+                }
+            },
+            "get": {
+                "tags": ["Normal Users"],
+                "summary": "read all Blogs",
+                "description": "view All Blogs",
+                "operationId": "getBlogs",
+                "responses": {
+                    "201": {
+                        "description": "blog successfully retrieved"
+                    },
+                    "404": {
+                        "description": "invalid URL"
+                    }
+                }
+            }
+
+
+        },
+        "/blogs/{blogId}": {
+            "get": {
+                "tags": ["Normal Users"],
+                "summary": "view a specified Blog",
+                "description": "description",
+                "operationId": "getOne",
+                "parameters": [{
+                    "in": "path",
+                    "name": "blogId",
+                    "required": true
+                }],
+                "responses": {
+                    "200": {
+                        "description": "blog successfully retrievd"
+                    },
+                    "404": {
+                        "description": "No Blog found to that ID"
+                    }
+                }
+            },
+            "delete": {
+                "tags": ["Normal Users"],
+                "summary": "Deleting a blog",
+                "description": "Delete Blog",
+                "operationId": "deleteBlog",
+                "parameters": [{
+                        "name": "auth-token",
+                        "in": "header",
+                        "required": true,
+                        "type": "string",
+                        "description": "Admin Token"
+                    },
+                    {
+                        "in": "path",
+                        "name": "blogId",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "blog successfully Deleted"
+                    },
+                    "404": {
+                        "description": "No Blog found to that ID"
+                    }
+                }
+            },
+            "patch": {
+                "tags": ["Normal Users"],
+                "summary": "Updating a blog",
+                "description": "Updated Blog",
+                "operationId": "updateBlog",
+                "parameters": [{
+                        "name": "auth-token",
+                        "in": "header",
+                        "required": true,
+                        "type": "string",
+                        "description": "Admin Token"
+                    },
+                    {
+                        "in": "path",
+                        "name": "blogId",
+                        "required": true
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": " object that needed to create a blog",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Blogcreation"
+                        }
+                    }
+
+                ],
+                "responses": {
+                    "200": {
+                        "description": "blog successfully Updated"
+                    },
+                    "404": {
+                        "description": "No Blog found to that ID"
+                    },
+                    "400": {
+                        "description": "invalid input"
+                    }
+                }
+            }
+
+        },
+        "/blogs/comment/{blogId}": {
+            "post": {
+                "tags": ["Normal Users"],
+                "summary": "commenting on an existing blog",
+                "description": "commenting on Blog",
+                "operationId": "comment",
+                "parameters": [{
+                        "in": "path",
+                        "name": "blogId",
+                        "required": true
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": " object that needed to comment on a blog",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Blogcomment"
+                        }
+                    }
+
+                ],
+                "responses": {
+                    "200": {
+                        "description": "comment successfully created"
+                    },
+                    "400": {
+                        "description": "invalid input"
+                    },
+                    "404": {
+                        "description": "No Blog found to that ID"
+                    }
+
+                }
+            }
+
+
+        },
+        "/blogs/likes/{blogId}": {
+            "post": {
+                "tags": ["Normal Users"],
+                "summary": "like a blog",
+                "description": "Liking Blog",
+                "operationId": "like",
+                "parameters": [{
+                        "in": "path",
+                        "name": "blogId",
+                        "required": true
+                    }
+
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Like successfully created"
+                    },
+                    "404": {
+                        "description": "No Blog found to that ID"
+                    }
+
+                }
+            }
+
+
+        }
+
+    },
+    "definitions": {
+        "UserLogin": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "required": true
+                },
+                "password": {
+                    "type": "string",
+                    "required": true
+                }
+
+            }
+        },
+        "CreateUser": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "required": true
+                },
+                "email": {
+                    "type": "string",
+                    "required": true
+                },
+                "password": {
+                    "type": "string",
+                    "required": true
+                }
+
+            }
+        },
+        "Blogcomment": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "required": true
+                },
+                "comment": {
+                    "type": "string",
+                    "required": true
+                }
+
+            }
+        },
+        "Blogcreation": {
+            "type": "object",
+            "properties": {
+                "title": {
+                    "type": "string",
+                    "required": true
+                },
+                "photoUrl": {
+                    "type": "string",
+                    "required": true
+                },
+                "description": {
+                    "type": "string",
+                    "required": true
+                }
+            }
+        }
+    }
+
+
+}
