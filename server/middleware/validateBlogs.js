@@ -1,6 +1,6 @@
    import Joi from '@hapi/joi';
 
-   function bValidate(req, res, next) {
+   export function bValidate(req, res, next) {
        const blogsValidation = Joi.object({
            title: Joi.string().min(6).required(),
 
@@ -13,4 +13,16 @@
        if (result.error) return res.status(400).json({ Message: result.error.details[0].message });
        next();
    }
-   module.exports = bValidate;
+
+   export function commentValidate(req, res, next) {
+       const commentValid = Joi.object({
+           name: Joi.string().min(6).required(),
+           comment: Joi.string().min(10).max(200).required()
+
+       });
+       const result = commentValid.validate(req.body);
+       // console.log(error);
+       if (result.error) return res.status(400).json({ Message: result.error.details[0].message });
+       next();
+   }
+   // module.exports = bValidate;

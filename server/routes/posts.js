@@ -6,7 +6,7 @@ import Mongoose from 'mongoose';
 import { schema } from '../models/Post';
 import verify from '../middleware/check-auth';
 import blogsValidation from '../middleware/validateBlogs';
-import bValidate from '../middleware/validateBlogs';
+import { bValidate, commentValidate } from '../middleware/validateBlogs';
 import post from './users';
 //=====create a Blog Post=============
 router.post('/', verify, bValidate, (req, res, next) => { //http://localhost:3000/blogs/
@@ -27,12 +27,7 @@ router.post('/', verify, bValidate, (req, res, next) => { //http://localhost:300
                 _id: result._id,
             }
         });
-    }).catch(err => {
-        console.log(err);
-        res.status(500).json({
-            error: err
-        });
-    });
+    })
 });
 //=================ALL DATA================
 router.get('/', async(req, res, next) => {
@@ -51,31 +46,22 @@ router.get('/', async(req, res, next) => {
                         date: doc.date,
                         comment: doc.comment,
                         likes: doc.likes,
-                        //Some Usfull Querries
-                        click_to_Like: 'Like Blog',
-                        type: 'DELETE',
-                        url: 'http://localhost:3000/blogs/likes/' + doc._id,
+                        // //Some Usfull Querries
+                        // click_to_Like: 'Like Blog',
+                        // type: 'DELETE',
+                        // url: 'http://localhost:3000/blogs/likes/' + doc._id,
 
-                        click_to_coment: 'Comment the Blog',
-                        Method: 'PATCH',
-                        url_path: 'http://localhost:3000/blogs/comment/' + doc._id
+                        // click_to_coment: 'Comment the Blog',
+                        // Method: 'PATCH',
+                        // url_path: 'http://localhost:3000/blogs/comment/' + doc._id
                     }
                 })
             };
             //console.log(docs);
             if (docs.length > 0) {
                 res.status(200).json(response)
-            } else {
-                res.status(404).json({
-                    message: 'Not found, check well your URL!!'
-                })
             }
-        }).catch(err => {
-            // console.log(err);
-            res.status(400).json({
-                error: err
-            });
-        });
+        })
 });
 //specific post
 router.get('/:blogId', async(req, res, next) => {
@@ -100,73 +86,53 @@ router.get('/:blogId', async(req, res, next) => {
             }
 
         })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({ message: 'No Data found on that ID' });
 
-        });
 });
 //==Delete post==================
-router.delete('/:postId', async(req, res) => {
-    try {
-        const blog = await Post.findOne({ _id: req.params.postId });
-        if (!blog) return res.status(404).send('Not Found');
-        await Post.remove({ _id: req.params.postId });
+router.delete('/:postId', verify, async(req, res) => {
 
-        return res.status(200).json({
-            status: 200,
-            message: "deleted Successiful",
-            //deletedPost
-        });
-    } catch (err) {
-        return res.status(404).json({
-            status: 404,
-            message: err.message
-        });
-    }
+    const blog = await Post.findOne({ _id: req.params.postId });
+    if (!blog) return res.status(404).send('Not Found');
+    await Post.remove({ _id: req.params.postId });
+
+    return res.status(200).json({
+        status: 200,
+        message: "deleted Successiful",
+        //deletedPost
+    });
 });
 //================Updating a Post===============
-router.patch('/:postId', bValidate, async(req, res) => {
-    try {
-        const blog = await Post.findOne({ _id: req.params.postId });
-        if (!blog) return res.status(404).send('blog Not Found');
-        await Post.updateOne({ _id: req.params.postId }, {
-            $set: { title: req.body.title, description: req.body.description }
+router.patch('/:postId', bValidate, verify, async(req, res) => {
 
-        });
-        return res.status(200).json({ message: 'successfuly Updated' });
-    } catch (err) {
-        console.log(err);
-        return res.status(400).json({ message: err });
-    }
+    const blog = await Post.findOne({ _id: req.params.postId });
+    if (!blog) return res.status(404).send('blog Not Found');
+    await Post.updateOne({ _id: req.params.postId }, {
+        $set: { title: req.body.title, description: req.body.description }
+
+    });
+    return res.status(200).json({ message: 'successfuly Updated' });
+
 });
 //=================comment======================
-router.post('/comment/:blogId', async(req, res) => {
-    try {
-        const blog = await Post.findOne({ _id: req.params.blogId });
-        if (!blog) return res.status(404).send('Blog Not Found');
-        await Post.updateOne({ _id: req.params.blogId }, { $push: { comment: req.body } });
-        return res.status(200).json({
-            status: 200,
-            message: 'Blog comments is recorded'
-        });
-    } catch (err) {
-        return res.status(400).json({ message: err });
-    }
+router.post('/comment/:blogId', commentValidate, async(req, res) => {
+
+    const blog = await Post.findOne({ _id: req.params.blogId });
+    if (!blog) return res.status(404).send('Blog Not Found');
+    await Post.updateOne({ _id: req.params.blogId }, { $push: { comment: req.body } });
+    return res.status(200).json({
+        status: 200,
+        message: 'Blog comments is recorded'
+    });
 });
 //=================Likes======================
 router.post('/likes/:blogId', async(req, res) => {
-    try {
-        const blog = await Post.findOne({ _id: req.params.blogId });
-        if (!blog) return res.status(404).send('Blog Not Found');
-        await Post.updateOne({ _id: req.params.blogId }, { $inc: { likes: 1 } });
-        return res.status(200).json({
-            status: 200,
-            message: 'thanks for Liking the Blog'
-        });
-    } catch (err) {
-        // console.log(err);
-        return res.status(400).json({ message: err });
-    }
+
+    const blog = await Post.findOne({ _id: req.params.blogId });
+    if (!blog) return res.status(404).send('Blog Not Found');
+    await Post.updateOne({ _id: req.params.blogId }, { $inc: { likes: 1 } });
+    return res.status(200).json({
+        status: 200,
+        message: 'thanks for Liking the Blog'
+    });
 });
 module.exports = router;

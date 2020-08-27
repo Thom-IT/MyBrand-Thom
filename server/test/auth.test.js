@@ -10,6 +10,7 @@ const { expect } = chai;
 chai.use(chaiHttp);
 let adminToken;
 let blogId;
+let qryId;
 let userId;
 describe("/server running", () => {
     it('should return 200 ok status', (done) => {
@@ -56,7 +57,7 @@ describe('POST /api/user/createUser', () => {
             });
 
     });
-    it('should NOT POST a new User', (done) => {
+    it('should NOT POST a new User, validation issue', (done) => {
         const blog = {
             name: "Uwimana",
             email: "uwagmail.com", //wrong email
@@ -70,6 +71,24 @@ describe('POST /api/user/createUser', () => {
             .end((error, response) => {
                 //adminToken = response.body.token;
                 response.should.have.status(400);
+                done();
+            });
+
+    });
+    it('should NOT POST a new User, when the user exist in DB', (done) => {
+        const blog = {
+            name: "Uwimana",
+            email: "uwa102@gmail.com",
+            password: "123456",
+
+        };
+        chai.request(app)
+            .post('/api/user/createUser')
+            // .set('auth-token', adminToken)
+            .send(blog)
+            .end((error, response) => {
+                //adminToken = response.body.token;
+                response.should.have.status(409);
                 done();
             });
 
@@ -263,7 +282,7 @@ describe('POST /blogs/comment/:blogId', () => {
     it('should POST comment on Existing Blog', (done) => {
         const blog = {
             name: "Mukunzi",
-            comment: "Great Job"
+            comment: "Great Job, good Job!!!!!!!"
 
         };
         chai.request(app)
@@ -271,6 +290,7 @@ describe('POST /blogs/comment/:blogId', () => {
             .set('auth-token', adminToken)
             .send(blog)
             .end((error, response) => {
+                console.log(response.body)
                 response.should.have.status(200);
                 response.body.should.be.an('object');
                 done();
@@ -367,12 +387,145 @@ describe('POST /blogs/comment/:blogId', () => {
                 .send(blog)
                 .end((error, response) => {
                     // blogId = response.body._id;
-                    response.should.have.status(404);
+                    response.should.have.status(400);
                     done();
                 });
         });
     });
 });
 
+//======================================Tesing Queries===========================================
+describe('POST /queries/', () => {
+    it('should create a new query', (done) => {
+        const querydata = {
+            name: "Mukunzi",
+            email: "mukmaforo@gmail.com",
+            query: "Dear Admin, I hope My Email finds you well. I would like to request that we can negociate how to work together cause I'm a busness man!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
 
-//comment
+        };
+        chai.request(app)
+            .post('/queries/')
+            // .set('auth-token', adminToken)
+            .send(querydata)
+            .end((error, response) => {
+                qryId = response.body.createdQuery._id;
+                console.log(response.body)
+                response.should.have.status(201);
+                response.should.be.an('object');
+                done();
+            });
+
+    });
+    it('should GET ALL queries', (done) => {
+        chai.request(app)
+            .get('/queries/all/')
+            .set('auth-token', adminToken)
+            .end((error, response) => {
+                response.should.have.status(200);
+                response.body.queryData.should.be.an('array');
+                done();
+            });
+    });
+    it('should return 400 when not valid(Bad Request)', (done) => {
+        const querydata = {
+            name: "",
+            email: "mukmaforo@gmail.com",
+            query: "Dear Admin, I hope My Email finds you well. I would like to request that we can negociate how to work together cause I'm a busness man!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
+
+        };
+        chai.request(app)
+            .post('/queries/')
+            .set('auth-token', adminToken)
+            .send(querydata)
+            .end((error, response) => {
+                // blogId = response.body.createdBlog._id;
+                console.log(response.body)
+                response.should.have.status(400);
+                //  response.should.be.an('object');
+                done();
+            });
+
+    });
+});
+describe('GET /queries/=>should return 200 on success', () => {
+    it('should NOT GET ALL queries', (done) => {
+        chai.request(app)
+            .get('/q') //wrong URL
+            .set('auth-token', adminToken)
+            .end((error, response) => {
+                response.should.have.status(404);
+                //  response.text.should.be.eq("Not found, check well your URL");
+                done();
+            });
+
+    });
+    // it('should return 401 when user is not authenticated', (done) => {
+
+    //     const querydata = {
+    //         name: "Mukunzi",
+    //         email: "mukmaforo@gmail.com",
+    //         query: "Dear Admin, I hope My Email finds you well. I would like to request that we can negociate how to work together cause I'm a busness man!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
+
+    //     };
+
+    //     chai.request(app)
+    //         .post('/queries/')
+    //         // .set('auth-token', adminToken)
+    //         .send(querydata)
+    //         .end((error, response) => {
+    //             console.log(response.body)
+    //             response.should.have.status(401);
+    //             done();
+    //         });
+
+    // });
+});
+describe('GET /queries/:id', () => {
+    it('should GET a query by id', (done) => {
+        // const blogId = "5f4126de3f3d7f18b4467b55";
+        chai.request(app)
+            .get('/queries/' + qryId)
+            .set('auth-token', adminToken)
+            //.send(blog)
+            .end((error, response) => {
+                response.should.have.status(200);
+                response.body.blogs.should.be.an('object');
+                done();
+            });
+
+    });
+
+});
+//deleting
+describe('DELETE /queies/:id', () => {
+    it('should DELETE an Existing query', (done) => {
+        chai.request(app)
+            .delete('/queries/' + qryId)
+            .set('auth-token', adminToken)
+            .end((error, response) => {
+                response.should.have.status(200);
+                done();
+            });
+    });
+    it('should NOT DELETE an Existing Blog', (done) => {
+        chai.request(app)
+            .delete('/queries' + qryId)
+            .set('auth-token', adminToken)
+            .end((error, response) => {
+                response.should.have.status(404);
+
+                done();
+            });
+
+    });
+    it('should not GET a query by id', (done) => {
+        chai.request(app)
+            .get('/queries/' + qryId)
+            .set('auth-token', adminToken)
+            .end((error, response) => {
+                response.should.have.status(404);
+                done();
+            });
+    });
+
+});
