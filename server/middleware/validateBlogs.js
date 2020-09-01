@@ -5,7 +5,7 @@
            title: Joi.string().min(6).required(),
 
            photoUrl: Joi.string().uri({ scheme: 'https' }),
-           description: Joi.string().min(10).max(200).required()
+           description: Joi.string().min(10).max(300).required()
 
        });
        const result = blogsValidation.validate(req.body);

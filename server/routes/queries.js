@@ -62,7 +62,7 @@ router.get('/:id', verify, async(req, res, next) => {
             console.log("Data coming from DB", doc);
             if (doc) {
                 res.status(200).json({
-                    blogs: doc,
+                    queryData: doc,
                 });
 
             } else {

@@ -91,23 +91,22 @@ body {
 .container {
     padding-top: 20px;
     overflow-x: hidden;
-    overflow-y: visible;
-    height: 300px;
+    overflow-y: hideden;
+    height: auto;
     margin-right: 30px;
 }
 
 .col-1contact {
     position: relative;
-    width: 400px;
+    width: 80%;
     float: left;
-    height: 100px;
+    height: auto;
     margin: 10px;
     padding: 20px;
 }
 
 .col-2contact {
     height: 100%;
-    ;
     position: relative;
     width: 400px;
     float: left;
@@ -155,7 +154,6 @@ body {
 
 .col2 {
     height: 100%;
-    ;
     position: relative;
     width: 500px;
     float: left;
@@ -191,7 +189,6 @@ body {
     overflow-x: hidden;
     overflow-y: visible;
     height: 100%;
-    ;
     position: relative;
     width: 500px;
     float: left;
@@ -244,121 +241,4 @@ body {
     width: 40px;
     height: 40px;
     padding-left: 0px;
-}
-
-
-/* Media Query part================================*/
-
-
-/* ----------- iPhone 6, 6S, 7 and 8 ----------- */
-
-
-/* Portrait */
-
-@media only screen and (min-device-width: 375px) and (max-device-width: 667px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait) {
-    .navbar {
-        overflow: hidden;
-        background-color: #150233;
-        padding: 0px;
-    }
-    .navbar a {
-        float: left;
-        font-size: 4px;
-        color: white;
-        text-align: center;
-        padding: 0px 0px;
-        text-decoration: none;
-    }
-    .subnav {
-        float: left;
-        overflow: hidden;
-    }
-    .subnav .subnavbtn {
-        font-size: 4px;
-        border: none;
-        outline: none;
-        color: white;
-        padding-left: 4px;
-        background-color: inherit;
-        font-family: inherit;
-        margin: 0;
-    }
-    .navbar a:hover,
-    .subnav:hover .subnavbtn {
-        background-color: blue;
-    }
-    /* ====================div 2======================== */
-    .parent_div {
-        background: #F9F1F1;
-        height: 100px;
-        float: none;
-        margin-top: 0px;
-    }
-    .imj {
-        width: 100px;
-        height: 120px;
-        float: left;
-        padding-left: 10px;
-    }
-    .h3 {
-        margin-left: 150px;
-        margin-top: 20%;
-        font-size: 10px;
-    }
-    .h1 {
-        margin-left: 150px;
-        font-size: 14px;
-        font-style: normal;
-    }
-    .div-img {
-        background: #4a0b9b;
-        height: 120px;
-        width: 120px;
-    }
-    .container {
-        padding-top: 0px;
-        overflow-x: hidden;
-        overflow-y: visible;
-        height: 200px;
-        margin-left: 0;
-        float: left;
-        margin-top: 0%;
-    }
-    .col-1contact {
-        position: relative;
-        width: 95%;
-        float: left;
-        height: 100px;
-        margin-top: 80px;
-        margin-left: 0%;
-        margin-right: 10px;
-    }
-    .p1 {
-        font-family: Arial, Helvetica, sans-serif;
-        margin: 0;
-        font-size: 12px;
-    }
-    #inpt {
-        border: solid;
-        background: transparent;
-        width: 80%;
-        padding: 12px 20px;
-        border-radius: 10px;
-        font-size: 9px;
-    }
-    .col-2contact {
-        position: relative;
-        width: 95%;
-        float: left;
-        height: 100px;
-        margin-top: 400px;
-        margin-left: 0%;
-        margin-right: 10px;
-    }
-    .col-2img {
-        width: 240px;
-        height: 240px;
-        float: left;
-        padding-left: 20px;
-    }
 }
