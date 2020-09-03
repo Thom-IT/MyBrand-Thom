@@ -59,23 +59,23 @@ Working Routes
 
 EndpointFunctionality
 |-----------------------------------------------------------------------------
-|POST /api/user/login	      |admin log into his account                    |
-|-----------------------------|----------------------------------------------|
-|POST /blogs/	            |Admin create a blog post                      |
-|-----------------------------|----------------------------------------------|
-|GET /blogs/	            |user can retrieve all blog posts              |
-|-----------------------------|----------------------------------------------|
-|GET /blogs/:blogId	      |user retrieve a specific blog post            |
-|-----------------------------|----------------------------------------------|
-|PATCH /blogs/:blogId	      |Admin modify a specific blog post             |
+|POST /api/user/login	       admin log into his account                    |
 |----------------------------------------------------------------------------|
-|DELETE /blogs/:blogId	      |Admin can delete a specific blog post         |
-|-----------------------------|----------------------------------------------|
-|POST /posts/comment/:blogId	|user can add a comment on a specific blog post|
-|-----------------------------|----------------------------------------------|
-|POST /posts/likes/:blogId	|user can add a like on a specific blog post   |
-|-----------------------------|----------------------------------------------|
-|POST /queries/	            |user can create a query                       |
-|-----------------------------|----------------------------------------------|
-|GET /queries/	            |Admin retrieve all queries                    |
+|POST /blogs/	             Admin create a blog post                      |
+|----------------------------------------------------------------------------|
+|GET /blogs/	             user can retrieve all blog posts              |
+|----------------------------------------------------------------------------|
+|GET /blogs/:blogId	       user retrieve a specific blog post            |
+|----------------------------------------------------------------------------|
+|PATCH /blogs/:blogId	       Admin modify a specific blog post             |
+|----------------------------------------------------------------------------|
+|DELETE /blogs/:blogId	       Admin can delete a specific blog post         |
+|----------------------------- ----------------------------------------------|
+|POST /posts/comment/:blogId	 user can add a comment on a specific blog post|
+|----------------------------------------------------------------------------|
+|POST /posts/likes/:blogId	 user can add a like on a specific blog post   |
+|----------------------------------------------------------------------------|
+|POST /queries/	             user can create a query                       |
+|----------------------------------------------------------------------------|
+|GET /queries/	             Admin retrieve all queries                    |
 |----------------------------------------------------------------------------|
