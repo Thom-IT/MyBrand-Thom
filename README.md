@@ -1,33 +1,32 @@
 [![Coverage Status](https://coveralls.io/repos/github/Thom-IT/MyBrand-Thom/badge.svg?branch=ft-coveralls)](https://coveralls.io/github/Thom-IT/MyBrand-Thom?branch=ft-coveralls)
 [![Build Status](https://travis-ci.com/Thom-IT/MyBrand-Thom.svg?branch=Develop)](https://travis-ci.com/Thom-IT/MyBrand-Thom)
 
-My Brand-Thomas Website 🎉
+My Brand-Thomas Website 
 
-features ✨
+features 
 ADMIN:
-      . can login into his account.
+      .can login into his account.
       .can create a blog post.
       .can edit a blog post.
       .can delete a blog post.
+      .can view all queries.
 
 NORMAL USERS:      
       .can view all blog post.
       .can view a specific blog post.
-An admin can view all queries.
-An admin can view a specific query.
-An admin can delete a specific query.
+
 
        .add a comment on a specific blog post.
        .can like a specific blog post.
 
-UI Template 💄
-To view the UI click here
+UI Template 
+[Click here](https://mybrandthom.netlify.app/)
 
-API Host 🌐
-API endpoints: 
+API Host
+[Click here](https://mybrandthomas.herokuapp.com/)
 
-API Documentation 📝
-API endpoints Documentation:
+API Documentation 
+[Click here](https://mybrandthomas.herokuapp.com/api-docs/)
 
 Technologies && Tools
 
@@ -58,16 +57,25 @@ Run Test case
 npm run test
 Working Routes
 
-Endpoint	                  Functionality
-POST /api/user/login	      admin log into his account
-POST /blogs/	            Admin create a blog post
-GET /blogs/	                  retrieve all blog posts
-GET /blogs/:blogId	      retrieve a specific blog post
-PATCH /blogs/:blogId	      Admin modify a specific blog post
-DELETE /blogs/:blogId	      delete a specific blog post
-POST /posts/comment/:blogId	add a comment on a specific blog post
-POST /posts/likes/:blogId	add a like on a specific blog post
-POST /queries/	            create a query
-GET /queries/	            Admin retrieve all queries
-GET /queries/:id	            Admin retrieve a specific query
-DELETE /queries/:id	      Admin delete a specific query
+EndpointFunctionality
+|-----------------------------------------------------------------------------
+|POST /api/user/login	      |admin log into his account                    |
+|-----------------------------|----------------------------------------------|
+|POST /blogs/	            |Admin create a blog post                      |
+|-----------------------------|----------------------------------------------|
+|GET /blogs/	            |user can retrieve all blog posts              |
+|-----------------------------|----------------------------------------------|
+|GET /blogs/:blogId	      |user retrieve a specific blog post            |
+|-----------------------------|----------------------------------------------|
+|PATCH /blogs/:blogId	      |Admin modify a specific blog post             |
+|----------------------------------------------------------------------------|
+|DELETE /blogs/:blogId	      |Admin can delete a specific blog post         |
+|-----------------------------|----------------------------------------------|
+|POST /posts/comment/:blogId	|user can add a comment on a specific blog post|
+|-----------------------------|----------------------------------------------|
+|POST /posts/likes/:blogId	|user can add a like on a specific blog post   |
+|-----------------------------|----------------------------------------------|
+|POST /queries/	            |user can create a query                       |
+|-----------------------------|----------------------------------------------|
+|GET /queries/	            |Admin retrieve all queries                    |
+|----------------------------------------------------------------------------|
